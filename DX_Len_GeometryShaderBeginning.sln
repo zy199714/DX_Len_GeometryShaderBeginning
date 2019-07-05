@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DX_Len_GeometryShaderBeginning", "DX_Len_GeometryShaderBeginning\DX_Len_GeometryShaderBeginning.vcxproj", "{9F538858-26E3-4681-B5E6-C2B57DEA2776}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F538858-26E3-4681-B5E6-C2B57DEA2776}.Debug|x64.ActiveCfg = Debug|x64
+		{9F538858-26E3-4681-B5E6-C2B57DEA2776}.Debug|x64.Build.0 = Debug|x64
+		{9F538858-26E3-4681-B5E6-C2B57DEA2776}.Debug|x86.ActiveCfg = Debug|Win32
+		{9F538858-26E3-4681-B5E6-C2B57DEA2776}.Debug|x86.Build.0 = Debug|Win32
+		{9F538858-26E3-4681-B5E6-C2B57DEA2776}.Release|x64.ActiveCfg = Release|x64
+		{9F538858-26E3-4681-B5E6-C2B57DEA2776}.Release|x64.Build.0 = Release|x64
+		{9F538858-26E3-4681-B5E6-C2B57DEA2776}.Release|x86.ActiveCfg = Release|Win32
+		{9F538858-26E3-4681-B5E6-C2B57DEA2776}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {312E7119-17C2-4CD0-9D1F-C4339B411C0C}
+	EndGlobalSection
+EndGlobal

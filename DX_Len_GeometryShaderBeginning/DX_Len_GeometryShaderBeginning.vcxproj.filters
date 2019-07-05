@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{a01273ef-b303-435b-9014-b5a40d7d88a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="effect">
+      <UniqueIdentifier>{bdf3fff3-909b-457e-88a5-193b82dfc013}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library">
+      <UniqueIdentifier>{ca9e264e-0669-499f-b5ff-2ea2d47d73ad}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="effect\BasicEffect.cpp">
+      <Filter>effect</Filter>
+    </ClCompile>
+    <ClCompile Include="GameApp.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WinMian.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\Collision.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\d3dApp.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\d3dUtil.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\DDSTextureLoader.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\DXTrace.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\GameObject.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\GameTimer.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\Geometry.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\Keyboard.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\ObjReader.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\RenderStates.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\ScreenGrab.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\TextureRender.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\Vertex.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\WICTextureLoader.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\GameClock.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\GameTime.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\GameComponent.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\DrawableGameComponent.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\GameCamera.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\FirstPersonGameCamera.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\Model.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\Material.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ReaderObj.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="common\Mouse.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="effect\MiniMapEffect.cpp">
+      <Filter>effect</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="effect\EffectHelper.h">
+      <Filter>effect</Filter>
+    </ClInclude>
+    <ClInclude Include="effect\Effects.h">
+      <Filter>effect</Filter>
+    </ClInclude>
+    <ClInclude Include="GameApp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\Collision.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\d3dApp.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\d3dUtil.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\DDSTextureLoader.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\DXTrace.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\GameObject.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\GameTimer.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\Geometry.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\Keyboard.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\LightHelper.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\Mouse.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\ObjReader.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\RenderStates.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\ScreenGrab.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\TextureRender.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\Vertex.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\WICTextureLoader.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Common.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\GameClock.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\GameTime.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\GameComponent.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\DrawableGameComponent.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\GameCamera.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\FirstPersonGameCamera.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Model.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Mesh.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Material.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\ReaderObj.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
