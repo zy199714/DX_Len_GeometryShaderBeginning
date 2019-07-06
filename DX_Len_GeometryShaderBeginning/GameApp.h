@@ -31,6 +31,7 @@ private:
 	void DrawTree();
 
 private:
+	int count = 0;
 	float spend = 10.0f;
 	float thet = (XM_PI / 180) * 10;
 	
@@ -59,7 +60,8 @@ private:
 	float yaw = 0.0f;
 
 	FirstPersonGameCamera* mCamera;						// 摄像机
-	GameCamera* mShadowCamrea;
+	FirstPersonGameCamera* mContonl=nullptr;
+	FirstPersonGameCamera* mShadowCamrea;
 	CameraMode mCameraMode;									// 摄像机模式
 };
 

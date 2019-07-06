@@ -5,6 +5,8 @@ float4 PS(VertexPosHWNormalTex pIn) : SV_Target
 { 
     // 若不使用纹理，则使用默认白色
     float4 texColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
+    float2 projectTexCoord = float2(0.0f, 0.0f);
+    float lightDepthValue = 1.0f;
 
     if (gTextureUsed)
     {
@@ -17,23 +19,20 @@ float4 PS(VertexPosHWNormalTex pIn) : SV_Target
     [flatten]
     if(gShadowEnabled)
     {
-        float4 lpos = float4(pIn.ProjTex.xyz / pIn.ProjTex.w, pIn.ProjTex.w);
+        projectTexCoord.x = (pIn.lightViewPositionH.x / pIn.lightViewPositionH.w) / 2.0f + 0.5f;
+        projectTexCoord.y = (-pIn.lightViewPositionH.y / pIn.lightViewPositionH.w) / 2.0f + 0.5f;
 
-        if (lpos.x < -1.0f || lpos.x > 1.0f ||
-            lpos.y < -1.0f || lpos.y > 1.0f ||
-            lpos.z < 0.0f || lpos.z > 1.0f)
+        if ((saturate(projectTexCoord.x) == projectTexCoord.x) && (saturate(projectTexCoord.y) == projectTexCoord.y))
         {
-        }
-        else
-        {     
-            lpos.x = lpos.x / 2 + 0.5;
-            lpos.y = lpos.y / 2 + 0.5;
+            float depth = gShadowMap.Sample(gSamPonitBorder, float2(projectTexCoord)).r;
 
-            float shadowMapDepth = gShadowMap.Sample(gSamWrap, float2(lpos.x, lpos.y));
-            //float shadowMapDepth = length(gLightPos.xyz - pIn.PosW);
+            lightDepthValue = pIn.lightViewPositionH.z / pIn.lightViewPositionH.w;
 
-            if (shadowMapDepth < lpos.z)
-                return texColor * 0.55;
+            if ((lightDepthValue - gBias) > depth)
+                {
+                    texColor.rgb *= 0.24;   
+                    return texColor;
+                }
         }
     }
     

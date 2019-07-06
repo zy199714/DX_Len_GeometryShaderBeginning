@@ -3,7 +3,7 @@
 namespace Library
 {
 	const float GameCamera::DefaultFieldOfView = XM_PI / 3;
-	const float GameCamera::DefaultNearPlaneDistance = 0.01f;
+	const float GameCamera::DefaultNearPlaneDistance = 0.001f;
 	const float GameCamera::DefaultFarPlaneDistance = 10000.0f;
 
 	GameCamera::GameCamera(float width, float height)
@@ -177,10 +177,10 @@ namespace Library
 	}
 
 	void GameCamera::Initialize()
-	{
+	{	
+		Reset();
 		UpdatePerspectiveProjectionMatrix();
 		UpdateOrthogonalProjectionMatrix();
-		Reset();
 	}
 
 	void GameCamera::Update(const GameTime& gameTime)

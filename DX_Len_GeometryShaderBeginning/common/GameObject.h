@@ -30,7 +30,7 @@ public:
 	// 设置模型
 	void SetModel(ID3D11Device *device, std::string fileName);
 
-	void SetMesh(ID3D11Device *device, const Geometry::MeshData<VertexPosTex>& meshData);
+	void SetMesh(ID3D11Device *device, const Geometry::MeshData<VertexPosTex> meshData);
 
 	void SetPosition(float x, float y, float z);
 	void SetRotate(float x, float y, float z);
@@ -44,17 +44,21 @@ public:
 	void Draw(ComPtr<ID3D11DeviceContext> deviceContext, BasicEffect& effect);
 	void Draw(ComPtr<ID3D11DeviceContext> deviceContext, MiniMapEffect& effect);
 	// 绘制实例
-	//void DrawInstanced(ComPtr<ID3D11DeviceContext> deviceContext, BasicEffect & effect, const std::vector<DirectX::XMMATRIX>& data);
+	void DrawInstanced(ComPtr<ID3D11DeviceContext> deviceContext, BasicEffect & effect, const std::vector<DirectX::XMMATRIX>& data);
+	size_t GetCapacity() const;
+	void ResizeBuffer(ComPtr<ID3D11Device> device, size_t count);
 
 private:
 	void CreateWorldMatrix();
 
 	Model* mModel;												// 模型
-	DirectX::XMFLOAT4X4 mWorldMatrix;							// 世界矩阵
+	DirectX::XMFLOAT4X4 mWorldMatrix;				// 世界矩阵
 
 	DirectX::XMFLOAT3 mPosition;
 	DirectX::XMFLOAT3 mRotate;
 	DirectX::XMFLOAT3 mScaling;
-};
 
+	ID3D11Buffer* mInstancedBuffer;
+	size_t mCapacity;
+};
 #endif

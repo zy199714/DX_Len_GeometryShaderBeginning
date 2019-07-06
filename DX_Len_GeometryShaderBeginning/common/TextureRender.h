@@ -1,7 +1,4 @@
 //***************************************************************************************
-// TextureRender.h by X_Jun(MKXJun) (C) 2018-2019 All Rights Reserved.
-// Licensed under the MIT License.
-//
 // 渲染到纹理类
 // Render-To-Texture class.
 //***************************************************************************************
@@ -30,10 +27,12 @@ public:
 	// 结束对当前纹理的渲染，还原状态
 	void End(ComPtr<ID3D11DeviceContext> deviceContext);
 	// 获取渲染好的纹理
-	ComPtr<ID3D11ShaderResourceView> GetOutputTexture();
+	ComPtr<ID3D11ShaderResourceView> GetOutputTextureRT();
+	ComPtr<ID3D11ShaderResourceView> GetOutputTextureDS();
 
 private:
-	ComPtr<ID3D11ShaderResourceView>	mOutputTextureSRV;	// 输出的纹理对应的着色器资源视图
+	ComPtr<ID3D11ShaderResourceView>	mOutputTextureRT_SRV;	// 输出的纹理对应的着色器资源视图
+	ComPtr<ID3D11ShaderResourceView>	mOutputTextureDS_SRV;
 	ComPtr<ID3D11RenderTargetView>		mOutputTextureRTV;	// 输出的纹理对应的渲染目标视图
 	ComPtr<ID3D11DepthStencilView>		mOutputTextureDSV;	// 输出纹理所用的深度/模板视图
 	D3D11_VIEWPORT						mOutputViewPort;	// 输出所用的视口

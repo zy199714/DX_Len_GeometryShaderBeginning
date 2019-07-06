@@ -11,9 +11,9 @@ namespace Library
 
 		virtual ~FirstPersonGameCamera();
 
-		// 平移
+		// 平移，±X方向(1.0, 0.0, 0.0)
 		void Strafe(float d);
-		// 直行(平面移动)
+		// 直行，±Z方向(0.0, 0.0, 1.0)
 		void Walk(float d);
 		// 前进(朝前向移动)
 		void MoveForward(float d);

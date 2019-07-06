@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -155,6 +155,7 @@
     <ClCompile Include="Library\GameComponent.cpp" />
     <ClCompile Include="Library\GameTime.cpp" />
     <ClCompile Include="Library\DrawableGameComponent.cpp" />
+    <ClCompile Include="Library\Light.cpp" />
     <ClCompile Include="Library\Material.cpp" />
     <ClCompile Include="Library\Model.cpp" />
     <ClCompile Include="Library\ReaderObj.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Library\GameCamera.h" />
     <ClInclude Include="Library\GameClock.h" />
     <ClInclude Include="Library\GameComponent.h" />
+    <ClInclude Include="Library\Light.h" />
     <ClInclude Include="Library\Material.h" />
     <ClInclude Include="Library\Mesh.h" />
     <ClInclude Include="Library\Model.h" />

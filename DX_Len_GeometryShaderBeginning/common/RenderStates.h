@@ -28,6 +28,8 @@ public:
 
 	static ComPtr<ID3D11SamplerState> SSLinearWrap;		// 采样器状态：线性过滤
 	static ComPtr<ID3D11SamplerState> SSLinearBorder;		// 采样器状态：线性过滤
+	static ComPtr<ID3D11SamplerState> SSPonitWrap;		// 采样器状态：点过滤
+	static ComPtr<ID3D11SamplerState> SSPonitBorder;		// 采样器状态：点过滤
 	static ComPtr<ID3D11SamplerState> SSAnistropicWrap;	// 采样器状态：各项异性过滤
 
 	static ComPtr<ID3D11BlendState> BSNoColorWrite;		// 混合状态：不写入颜色

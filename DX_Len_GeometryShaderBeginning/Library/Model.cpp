@@ -77,17 +77,17 @@ namespace Library
 	{
 		for (auto mesh : mMeshes)
 		{
-			delete mesh;
+			DeleteObject(mesh);
 		}
 
 		for (Material* material : mMaterials)
 		{
-			delete material;
+			DeleteObject(material);
 		}
 
 		for (VertexIndexBuffer* buffer : mBuffer)
 		{
-			delete buffer;
+			DeleteObject(buffer);
 		}
 	}
 

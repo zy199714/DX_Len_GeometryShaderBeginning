@@ -71,7 +71,8 @@ public:
 	void XM_CALLCONV SetWorldMatrix(DirectX::FXMMATRIX W);
 	void XM_CALLCONV SetViewMatrix(DirectX::FXMMATRIX V);
 	void XM_CALLCONV SetProjMatrix(DirectX::FXMMATRIX P);
-	void XM_CALLCONV SetLightViewProjMatrix(DirectX::FXMMATRIX LVP);
+	void XM_CALLCONV SetLightViewMatrix(DirectX::FXMMATRIX LV);
+	void XM_CALLCONV SetLightProjMatrix(DirectX::FXMMATRIX LP);
 	//
 	// 光照、材质和纹理相关设置
 	//
@@ -79,9 +80,9 @@ public:
 	// 各种类型灯光允许的最大数目
 	static const int maxLights = 5;
 
-	void SetDirLight(size_t pos, const DirectionalLight& dirLight);
-	void SetPointLight(size_t pos, const PointLight& pointLight);
-	void SetSpotLight(size_t pos, const SpotLight& spotLight);
+	void SetDirLight(size_t pos, const directionalLight_struct& dirLight);
+	void SetPointLight(size_t pos, const pointLight_struct& pointLight);
+	void SetSpotLight(size_t pos, const spotLight_struct& spotLight);
 	void SetNumLight(int dir, int point, int spot);
 
 	void SetMaterial(const material_struct& mat);
@@ -92,6 +93,7 @@ public:
 	void SetTextureShadow(ComPtr<ID3D11ShaderResourceView> texture);
 
 	void XM_CALLCONV SetEyePos(DirectX::FXMVECTOR eyePos);
+	void XM_CALLCONV SetLightPos(DirectX::FXMVECTOR lightPos);
 	
 	//
 	// 雾效设置

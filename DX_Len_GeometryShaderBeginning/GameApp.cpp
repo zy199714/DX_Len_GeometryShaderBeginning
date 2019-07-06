@@ -99,14 +99,28 @@ void GameApp::UpdateScene(float dt)
 		// 自由摄像机的操作
 		//
 		// 方向移动
+	if (mKeyboardTracker.IsKeyPressed(Keyboard::N))
+	{
+		if (count == 0)
+		{
+			mContonl = mShadowCamrea;
+			count = 1;
+		}
+		else
+		{
+			mContonl = mCamera;
+			count = 0;
+		}
+	}
+
 		if (keyState.IsKeyDown(Keyboard::W))
-			mCamera->MoveForward(dt * spend);
+			mContonl->MoveForward(dt * spend);
 		if (keyState.IsKeyDown(Keyboard::S))
-			mCamera->MoveForward(dt * -spend);
+			mContonl->MoveForward(dt * -spend);
 		if (keyState.IsKeyDown(Keyboard::A))
-			mCamera->Strafe(dt * -spend);
+			mContonl->Strafe(dt * -spend);
 		if (keyState.IsKeyDown(Keyboard::D))
-			mCamera->Strafe(dt * spend);
+			mContonl->Strafe(dt * spend);
 
 		if (mKeyboardTracker.IsKeyPressed(Keyboard::D1))
 		{
@@ -120,12 +134,12 @@ void GameApp::UpdateScene(float dt)
 
 		if (mKeyboardTracker.IsKeyPressed(Keyboard::Q))
 		{
-			mShadowBits += 0.00001f;
+			mShadowBits += 0.0000001f;
 			mBasicEffect.SetShadowBits(mShadowBits);
 		}
 		if (mKeyboardTracker.IsKeyPressed(Keyboard::E))
 		{
-			mShadowBits -= 0.00001f;
+			mShadowBits -= 0.0000001f;
 			mBasicEffect.SetShadowBits(mShadowBits);
 		}
 
@@ -159,18 +173,21 @@ void GameApp::UpdateScene(float dt)
 			pitch = yaw = roll = 0.0f;
 		}
 		mArrow.SetRotate(pitch, yaw, roll);
-
+		
 		// 视野旋转，防止开始的差值过大导致的突然旋转
-		mCamera->Pitch(mouseState.y * dt * 1.25f);
-		mCamera->Roll(mouseState.x * dt * 1.25f);
+		mContonl->Pitch(mouseState.y * dt * 1.25f);
+		mContonl->Roll(mouseState.x * dt * 1.25f);
 
 	// 更新观察矩阵
-	mCamera->UpdateViewMatrix();
-	mBasicEffect.SetViewMatrix(mCamera->ViewMatrix());
-	mBasicEffect.SetEyePos(mCamera->PositionVector());
+	mContonl->UpdateViewMatrix();
+	mBasicEffect.SetViewMatrix(mContonl->ViewMatrix());
+	mBasicEffect.SetEyePos(mContonl->PositionVector());
 
+	mBasicEffect.SetLightViewMatrix(mShadowCamrea->ViewMatrix());
+	mBasicEffect.SetLightProjMatrix(mShadowCamrea->OrthogonalProjectionMatrix());
+	mBasicEffect.SetLightPos(mShadowCamrea->PositionVector());
 		
-	// 重置滚轮值
+	// 重置滚轮值				
 	mMouse->ResetScrollWheelValue();
 
 	// 退出程序
@@ -188,14 +205,20 @@ void GameApp::DrawScene()
 	if (pp)
 	{	
 		mRenderShadow->Begin(md3dImmediateContext);
+
+		//实例绘制
+		mBasicEffect.SetRenderShadowMap(md3dImmediateContext, BasicEffect::RenderInstance);
+		DrawTree();
+		//单个绘制
 		mBasicEffect.SetRenderShadowMap(md3dImmediateContext, BasicEffect::RenderObject);
-		mArrow.Draw(md3dImmediateContext, mBasicEffect);
+
+		//mTrees.Draw(md3dImmediateContext, mBasicEffect);
 		// 输出截屏
 		//ComPtr<ID3D11Texture2D> backBuffer;
 		//mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backBuffer.GetAddressOf()));
 		//HR(SaveWICTextureToFile(md3dImmediateContext.Get(), backBuffer.Get(), GUID_ContainerFormatPng, L"Screenshot\\output.png"));
 		//pp = false;
-		mBasicEffect.SetTextureShadow(mRenderShadow->GetOutputTexture());
+		mBasicEffect.SetTextureShadow(mRenderShadow->GetOutputTextureRT());
 		mRenderShadow->End(md3dImmediateContext);
 	}
 	
@@ -209,11 +232,15 @@ void GameApp::DrawScene()
 	// 绘制地面,树
 	mBasicEffect.SetRenderDefault(md3dImmediateContext, BasicEffect::RenderObject);
 	mGround.Draw(md3dImmediateContext, mBasicEffect);
-	mTrees.Draw(md3dImmediateContext, mBasicEffect);
+	//mTrees.Draw(md3dImmediateContext, mBasicEffect);
 	mArrow.Draw(md3dImmediateContext, mBasicEffect);
 
+	mBasicEffect.SetRenderDefault(md3dImmediateContext, BasicEffect::RenderInstance);
+	DrawTree();
+
+
 	mMiniMapEffect.SetRenderDefault(md3dImmediateContext);
-	mMiniMapEffect.SetTextureDiffuse(mRenderShadow->GetOutputTexture());
+	mMiniMapEffect.SetTextureDiffuse(mRenderShadow->GetOutputTextureRT());
 	mMiniMap.Draw(md3dImmediateContext, mMiniMapEffect);
 
 	// ******************
@@ -243,27 +270,27 @@ void GameApp::DrawScene()
 
 bool GameApp::InitResource()
 {
-	mRenderShadow = std::make_unique<TextureRender>(md3dDevice, mClientWidth, mClientHeight,false);
+	mRenderShadow = std::make_unique<TextureRender>(md3dDevice, 800*4, 600*4, false);
 
 	// ******************
 	// 初始化游戏对象
 	//
 
 	// 创建随机的树
-	//CreateRandomTrees();
+	CreateRandomTrees();
 
 	mGround.SetModel(md3dDevice.Get(), "Model\\ground.obj");
 	mGround.SetPosition(0.0f, 0.0f, 0.0f);
 
 
 	mTrees.SetModel(md3dDevice.Get(), "Model\\tree.obj");
-	mTrees.SetPosition(0.0f, 0.0f, 0.0f);
+	//mTrees.SetPosition(0.0f, 20.0f, 0.0f);
 	mTrees.SetScaling(0.02f, 0.02f, 0.02f);
 
 	mArrow.SetModel(md3dDevice.Get(), "Model\\arrow.obj");
 	mArrow.SetPosition(0.0f, 0.0f, 0.0f);
 
-	mMiniMap.SetMesh(md3dDevice.Get(), Geometry::Create2DShow(0.66666666f, -0.75f, 0.33333333f, 0.25f));
+	mMiniMap.SetMesh(md3dDevice.Get(), Geometry::Create2DShow(0.7f, -0.7f, 0.3f, 0.3f));
 
 	// ******************
 	// 初始化摄像机
@@ -275,13 +302,14 @@ bool GameApp::InitResource()
 	mCamera->Initialize();
 	mCamera->SetViewPort(0.0f, 0.0f, (float)mClientWidth, (float)mClientHeight);
 	
+	mContonl = mCamera;
 	// ******************
 	// 初始化几乎不会变化的值
 	//
-	mShadowCamrea = new GameCamera((float)mClientWidth, (float)mClientHeight);
+	mShadowCamrea = new FirstPersonGameCamera((float)mClientWidth, (float)mClientHeight);
 	mShadowCamrea->Initialize();
-	mShadowCamrea->SetPosition(800.0f, 940.0f, -50.0f);
-	mShadowCamrea->SetDirection(-0.5f,-0.566f,  0.0f);
+	mShadowCamrea->SetPosition(0.0f, 20.0f, 0.0f);
+	//mShadowCamrea->SetDirection(0.0f, -1.0f,  0.0f);
 	mShadowCamrea->UpdateViewMatrix();
 
 	// 特效
@@ -290,24 +318,23 @@ bool GameApp::InitResource()
 	mBasicEffect.SetFogRange(120.0f);
 
 	// 方向光(默认)
-	DirectionalLight dirLight;
+	directionalLight_struct dirLight;
 	dirLight.Ambient = XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
 	dirLight.Diffuse = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
 	dirLight.Specular = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
-	//dirLight.Direction = XMFLOAT3(-0.5f,-0.866f,  0.0f);
-	dirLight.Direction = XMFLOAT3(-1.0f, 0.0f, 1.0f);
+	dirLight.Direction = XMFLOAT3(-0.5f,-0.866f,  0.0f);
 	mBasicEffect.SetDirLight(0, dirLight);
 
-	PointLight ponitLight;
+	pointLight_struct ponitLight;
 	ponitLight.Ambient = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
-	ponitLight.Diffuse = XMFLOAT4(0.99f, 0.99f, 0.99f, 1.99f);
+	ponitLight.Diffuse = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
 	ponitLight.Specular = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
-	ponitLight.Position = XMFLOAT3(0.0f, 800.0f, 0.0f);;
+	ponitLight.Position = XMFLOAT3(0.0f, 300.0f, 0.0f);;
 	ponitLight.Att = XMFLOAT3(2.0f, 0.0f, 0.0f);
 	ponitLight.Range = 1000.0f;
 	mBasicEffect.SetPointLight(0, ponitLight);
 
-	mBasicEffect.SetNumLight(1, 0, 0);
+	mBasicEffect.SetNumLight(1, 1, 0);
 
 	material_struct mat;
 	mat.Ambient = { 0.3f, 0.3f, 0.3f,1.0f };
@@ -322,25 +349,19 @@ bool GameApp::InitResource()
 
 	// 关闭阴影
 	mShadowEnabled = 0;
-	mShadowBits = 0.0f;
+	mShadowBits = 0.0000019f;
 	mBasicEffect.SetShadowEnabled(mShadowEnabled);
 	mBasicEffect.SetShadowBits(mShadowBits);
 
-	mBasicEffect.SetLightViewProjMatrix(mShadowCamrea->ViewOrthogonalProjectionMatrix());
+	mBasicEffect.SetLightViewMatrix(mShadowCamrea->ViewMatrix());
+	mBasicEffect.SetLightProjMatrix(mShadowCamrea->OrthogonalProjectionMatrix());
 
 	return true;
 }
 
 void GameApp::DrawTree()
 {
-	mBasicEffect.SetTextureUsed(true);
-	// 统计实际绘制的物体数目
-	std::vector<XMMATRIX> acceptedData;
-	// 默认视锥体裁剪
-	//mCamera->ViewMatrix(), mCamera->PerspectiveProjectionMatrix();
-	// 默认硬件实例化绘制
-	mBasicEffect.SetRenderDefault(md3dImmediateContext, BasicEffect::RenderInstance);
-	//mTrees.DrawInstanced(md3dImmediateContext, mBasicEffect, mInstancedData);
+	mTrees.DrawInstanced(md3dImmediateContext, mBasicEffect, mInstancedData);
 }
 
 void GameApp::CreateRandomTrees()
@@ -348,26 +369,26 @@ void GameApp::CreateRandomTrees()
 	srand((unsigned)time(nullptr));
 	// 初始化树
 	mTrees.SetModel(md3dDevice.Get(), "Model\\tree.obj");
-	XMMATRIX S = XMMatrixScaling(0.015f, 0.015f, 0.015f);
+	XMMATRIX S = XMMatrixScaling(0.03f, 0.03f, 0.03f);
 
-	// 随机生成144颗随机朝向的树
+	// 随机生成随机朝向的树
 	float theta = 0.0f;
-	for (int i = 0; i < 16; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		// 取5-95的半径放置随机的树
 		for (int j =0; j < 2; ++j)
 		{
 			// 距离越远，树木越多
-			for (int k = 0; k <  j; ++k)
+			for (int k = 0; k < 2 * j + 1; ++k)
 			{
 				float radius = (float)(rand() % 30 + 30 * j + 5);
-				float randomRad = rand() % 256 / 256.0f * XM_2PI / 16;
+				float randomRad = rand() % 72 / 72.0f * XM_2PI / 4;
 				XMMATRIX T1 = XMMatrixTranslation(radius * cosf(theta + randomRad), 0.0f, radius * sinf(theta + randomRad));
-				XMMATRIX R = XMMatrixRotationY(rand() % 256 / 256.0f * XM_2PI);
+				XMMATRIX R = XMMatrixRotationY(rand() % 72 / 72.0f * XM_2PI);
 				XMMATRIX World = S * R * T1;
 				mInstancedData.push_back(World);
 			}
 		}
-		theta += XM_2PI / 16;
+		theta += XM_2PI / 4;
 	}
 }

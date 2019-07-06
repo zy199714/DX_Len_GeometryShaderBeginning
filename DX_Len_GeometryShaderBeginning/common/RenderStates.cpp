@@ -10,6 +10,8 @@ ComPtr<ID3D11RasterizerState> RenderStates::RSCullClockWise		= nullptr;
 ComPtr<ID3D11SamplerState> RenderStates::SSAnistropicWrap		= nullptr;
 ComPtr<ID3D11SamplerState> RenderStates::SSLinearWrap			= nullptr;
 ComPtr<ID3D11SamplerState> RenderStates::SSLinearBorder = nullptr;
+ComPtr<ID3D11SamplerState> RenderStates::SSPonitWrap = nullptr;
+ComPtr<ID3D11SamplerState> RenderStates::SSPonitBorder = nullptr;
 
 ComPtr<ID3D11BlendState> RenderStates::BSAlphaToCoverage		= nullptr;
 ComPtr<ID3D11BlendState> RenderStates::BSNoColorWrite			= nullptr;
@@ -87,6 +89,26 @@ void RenderStates::InitAll(ComPtr<ID3D11Device> device)
 	sampDesc.MinLOD = 0;
 	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
 	HR(device->CreateSamplerState(&sampDesc, SSLinearBorder.GetAddressOf()));
+
+	// 点过滤重复模式
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	HR(device->CreateSamplerState(&sampDesc, SSPonitWrap.GetAddressOf()));
+
+	// 线性过滤边框模式
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	HR(device->CreateSamplerState(&sampDesc, SSPonitBorder.GetAddressOf()));
 
 	// 各向异性过滤模式
 	sampDesc.Filter = D3D11_FILTER_ANISOTROPIC;

@@ -6,9 +6,9 @@
 
 
 // 环境光
-struct DirectionalLight
+struct directionalLight_struct
 {
-	DirectionalLight() { memset(this, 0, sizeof(DirectionalLight)); }
+	directionalLight_struct() { memset(this, 0, sizeof(directionalLight_struct)); }
 
 	DirectX::XMFLOAT4 Ambient;
 	DirectX::XMFLOAT4 Diffuse;
@@ -18,9 +18,9 @@ struct DirectionalLight
 };
 
 // 点光
-struct PointLight
+struct pointLight_struct
 {
-	PointLight() { memset(this, 0, sizeof(PointLight)); }
+	pointLight_struct() { memset(this, 0, sizeof(pointLight_struct)); }
 
 	DirectX::XMFLOAT4 Ambient;
 	DirectX::XMFLOAT4 Diffuse;
@@ -36,9 +36,9 @@ struct PointLight
 };
 
 // 聚光灯
-struct SpotLight
+struct spotLight_struct
 {
-	SpotLight() { memset(this, 0, sizeof(SpotLight)); }
+	spotLight_struct() { memset(this, 0, sizeof(spotLight_struct)); }
 
 	DirectX::XMFLOAT4 Ambient;
 	DirectX::XMFLOAT4 Diffuse;

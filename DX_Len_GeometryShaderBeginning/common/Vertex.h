@@ -62,4 +62,17 @@ struct VertexPosNormalTangentTex
 	static const D3D11_INPUT_ELEMENT_DESC inputLayout[4];
 };
 
+//////////////////////
+// Instance 数据结构
+
+struct InstanceVertexPosNormalTex
+{
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT3 normal;
+	DirectX::XMFLOAT2 tex;
+	DirectX::XMMATRIX world;
+	DirectX::XMMATRIX worldInvTranspose;
+	static const D3D11_INPUT_ELEMENT_DESC inputLayout[11];
+};
+
 #endif

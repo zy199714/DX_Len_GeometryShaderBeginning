@@ -31,9 +31,7 @@ namespace Library
 	void FirstPersonGameCamera::Walk(float d)
 	{
 		XMVECTOR pos = XMLoadFloat3(&mPosition);
-		XMVECTOR right = XMLoadFloat3(&mRight);
-		XMVECTOR up = XMLoadFloat3(&mUp);
-		XMVECTOR front = XMVector3Normalize(XMVector3Cross(right, up));
+		XMVECTOR front = { 0.0f, 0.0f,1.0f};
 		XMVECTOR dist = XMVectorReplicate(d);
 		// DestPos = Dist * Front + SrcPos
 		XMStoreFloat3(&mPosition, XMVectorMultiplyAdd(dist, front, pos));

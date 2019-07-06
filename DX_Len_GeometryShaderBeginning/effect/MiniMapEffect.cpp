@@ -122,7 +122,7 @@ void MiniMapEffect::SetRenderDefault(ComPtr<ID3D11DeviceContext> deviceContext)
 	deviceContext->GSSetShader(nullptr, nullptr, 0);
 	deviceContext->RSSetState(nullptr);
 
-	deviceContext->PSSetSamplers(0, 1, RenderStates::SSLinearWrap.GetAddressOf());
+	deviceContext->PSSetSamplers(0, 1, RenderStates::SSPonitBorder.GetAddressOf());
 	deviceContext->OMSetDepthStencilState(RenderStates::DSSNoDepthTest.Get(), 0);	// ¹Ø±ÕÉî¶È²âÊÔ
 	deviceContext->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
 }

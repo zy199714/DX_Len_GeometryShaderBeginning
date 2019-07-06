@@ -46,20 +46,22 @@ public:
 	struct CBChangesEveryFrame
 	{
 		DirectX::XMMATRIX view;
+		DirectX::XMMATRIX lightView;
+		DirectX::XMVECTOR lightPosition;
 		DirectX::XMVECTOR eyePos;
 	};
 
 	struct CBChangesOnResize
 	{
-		DirectX::XMMATRIX worldLightViewProj;
+		DirectX::XMMATRIX LightProj;
 		DirectX::XMMATRIX proj;
 	};
 
 	struct CBChangesRarely
 	{
-		DirectionalLight dirLight[BasicEffect::maxLights];
-		PointLight pointLight[BasicEffect::maxLights];
-		SpotLight spotLight[BasicEffect::maxLights];
+		directionalLight_struct dirLight[BasicEffect::maxLights];
+		pointLight_struct pointLight[BasicEffect::maxLights];
+		spotLight_struct spotLight[BasicEffect::maxLights];
 		int numDirLight;
 		int numPointLight;
 		int numSpotLight;
@@ -152,21 +154,6 @@ bool BasicEffect::InitAll(ComPtr<ID3D11Device> device)
 
 	ComPtr<ID3DBlob> blob;
 
-	// 实例输入布局
-	D3D11_INPUT_ELEMENT_DESC basicInstLayout[] = {
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "World", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1},
-		{ "World", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1},
-		{ "World", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32, D3D11_INPUT_PER_INSTANCE_DATA, 1},
-		{ "World", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1},
-		{ "WorldInvTranspose", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 64, D3D11_INPUT_PER_INSTANCE_DATA, 1},
-		{ "WorldInvTranspose", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 80, D3D11_INPUT_PER_INSTANCE_DATA, 1},
-		{ "WorldInvTranspose", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 96, D3D11_INPUT_PER_INSTANCE_DATA, 1},
-		{ "WorldInvTranspose", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 112, D3D11_INPUT_PER_INSTANCE_DATA, 1}
-	};
-
 	// ******************
 	// 创建顶点着色器
 	//
@@ -183,7 +170,7 @@ bool BasicEffect::InitAll(ComPtr<ID3D11Device> device)
 	HR(CreateShaderFromFile(L"HLSL\\ShadowMapInstance_VS.cso", L"HLSL\\ShadowMapInstance_VS.hlsl", "VS", "vs_5_0", blob.ReleaseAndGetAddressOf()));
 	HR(device->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, pImpl->shadowMapInstanceVS.GetAddressOf()));
 	// 创建顶点布局
-	HR(device->CreateInputLayout(basicInstLayout, ARRAYSIZE(basicInstLayout),
+	HR(device->CreateInputLayout(InstanceVertexPosNormalTex::inputLayout, ARRAYSIZE(InstanceVertexPosNormalTex::inputLayout),
 		blob->GetBufferPointer(), blob->GetBufferSize(), pImpl->instancePosNormalTexLayout.GetAddressOf()));
 
 	// ******************
@@ -230,6 +217,7 @@ void BasicEffect::SetRenderDefault(ComPtr<ID3D11DeviceContext> deviceContext, Re
 	deviceContext->PSSetShader(pImpl->basicPS.Get(), nullptr, 0);
 	deviceContext->PSSetSamplers(0, 1, RenderStates::SSLinearWrap.GetAddressOf());
 	deviceContext->PSSetSamplers(1, 1, RenderStates::SSLinearBorder.GetAddressOf());
+	deviceContext->PSSetSamplers(2, 1, RenderStates::SSPonitBorder.GetAddressOf());
 	deviceContext->OMSetDepthStencilState(nullptr, 0);
 	deviceContext->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
 }
@@ -278,28 +266,35 @@ void XM_CALLCONV BasicEffect::SetProjMatrix(FXMMATRIX P)
 	pImpl->isDirty = cBuffer.isDirty = true;
 }
 
-void XM_CALLCONV BasicEffect::SetLightViewProjMatrix(DirectX::FXMMATRIX LVP)
+void XM_CALLCONV BasicEffect::SetLightViewMatrix(DirectX::FXMMATRIX LV)
 {
-	auto& cBuffer = pImpl->cbOnResize;
-	cBuffer.data.worldLightViewProj = XMMatrixTranspose(LVP);
+	auto& cBuffer = pImpl->cbFrame;
+	cBuffer.data.lightView = XMMatrixTranspose(LV);
 	pImpl->isDirty = cBuffer.isDirty = true;
 }
 
-void BasicEffect::SetDirLight(size_t pos, const DirectionalLight & dirLight)
+void XM_CALLCONV BasicEffect::SetLightProjMatrix(DirectX::FXMMATRIX LP)
+{
+	auto& cBuffer = pImpl->cbOnResize;
+	cBuffer.data.LightProj = XMMatrixTranspose(LP);
+	pImpl->isDirty = cBuffer.isDirty = true;
+}
+
+void BasicEffect::SetDirLight(size_t pos, const directionalLight_struct & dirLight)
 {
 	auto& cBuffer = pImpl->cbRarely;
 	cBuffer.data.dirLight[pos] = dirLight;
 	pImpl->isDirty = cBuffer.isDirty = true;
 }
 
-void BasicEffect::SetPointLight(size_t pos, const PointLight & pointLight)
+void BasicEffect::SetPointLight(size_t pos, const pointLight_struct & pointLight)
 {
 	auto& cBuffer = pImpl->cbRarely;
 	cBuffer.data.pointLight[pos] = pointLight;
 	pImpl->isDirty = cBuffer.isDirty = true;
 }
 
-void BasicEffect::SetSpotLight(size_t pos, const SpotLight & spotLight)
+void BasicEffect::SetSpotLight(size_t pos, const spotLight_struct & spotLight)
 {
 	auto& cBuffer = pImpl->cbRarely;
 	cBuffer.data.spotLight[pos] = spotLight;
@@ -343,6 +338,13 @@ void XM_CALLCONV BasicEffect::SetEyePos(FXMVECTOR eyePos)
 {
 	auto& cBuffer = pImpl->cbFrame;
 	cBuffer.data.eyePos = eyePos;
+	pImpl->isDirty = cBuffer.isDirty = true;
+}
+
+void XM_CALLCONV BasicEffect::SetLightPos(FXMVECTOR LightPos)
+{
+	auto& cBuffer = pImpl->cbFrame;
+	cBuffer.data.lightPosition = LightPos;
 	pImpl->isDirty = cBuffer.isDirty = true;
 }
 
